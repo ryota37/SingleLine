@@ -1,28 +1,5 @@
 ﻿# include <Siv3D.hpp>
 
-void UpdateGrid(Grid<int32>& grid)
-{
-	// クリックされていない場合は何もしない
-	if (not MouseL.down())
-	{
-		return;
-	}
-
-	for (int32 y = 0; y < grid.height(); ++y)
-	{
-		for (int32 x = 0; x < grid.width(); ++x)
-		{
-			const RectF rect{ (x * 100), (y * 100), 100 };
-
-			if (rect.mouseOver())
-			{
-				// クリックのたびに要素を 0 → 1 → 2 → 3 → 0 → 1 → ... と変化させる
-				++grid[y][x] %= 4;
-			}
-		}
-	}
-}
-
 void DrawGrid(const Grid<int32>& grid)
 {
 	for (int32 y = 0; y < grid.height(); ++y)
@@ -126,8 +103,8 @@ void VisualizeCircleRoute(const Circle& circle, Grid<int32>& grid)
 			const RectF rect{ (x * 100), (y * 100), 100 };
 			if (x == grid_x && y == grid_y && isDirectionKeyPressed())
 			{
-				// 円が格子を通るたびに要素を 0 → 1 → 2 → 3 → 0 → 1 → ... と変化させる
-				++grid[y][x] %= 4;
+				// 円が格子を通るたびに要素を 0 → 1 → 0 → 1 ... と変化させる
+				++grid[y][x] %= 2;
 			}
 		}
 	}
@@ -144,8 +121,6 @@ void Main()
 
 	while (System::Update())
 	{
-		UpdateGrid(grid);
-
 		DrawGrid(grid);
 
 		UpdateCircle(circle, grid);
