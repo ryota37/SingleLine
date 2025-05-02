@@ -41,12 +41,36 @@ void DrawCircle(const Circle& circle)
 	circle.draw(Palette::Aqua);
 }
 
+bool isWallUp(Circle& circle)
+{
+	if (circle.y == 50) return true;
+	return false;
+}
+
+bool isWallLeft(Circle& circle)
+{
+	if (circle.x == 50) return true;
+	return false;
+}
+
+bool isWallDown(Circle& circle)
+{
+	if (circle.y == 550) return true;
+	return false;
+}
+
+bool isWallRight(Circle& circle)
+{
+	if (circle.x == 750) return true;
+	return false;
+}
+
 void UpdateCircle(Circle& circle)
 {
-	if (KeyLeft.down()) circle.x -= 100;
-	if (KeyUp.down()) circle.y -= 100;
-	if (KeyRight.down()) circle.x += 100;
-	if (KeyDown.down()) circle.y += 100;
+	if (KeyLeft.down() && !isWallLeft(circle)) circle.x -= 100;
+	if (KeyUp.down() && !isWallUp(circle)) circle.y -= 100;
+	if (KeyRight.down() && !isWallRight(circle)) circle.x += 100;
+	if (KeyDown.down() && !isWallDown(circle)) circle.y += 100;
 }
 
 void PrintGoal(const Circle& circle)
@@ -83,13 +107,7 @@ void VisualizeCircleRoute(const Circle& circle, Grid<int32>& grid)
 			}
 		}
 	}
-
-
-
 }
-
-
-
 
 void Main()
 {
