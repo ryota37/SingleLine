@@ -18,60 +18,57 @@ void DrawCircle(const Circle& circle)
 	circle.draw(Palette::Aqua);
 }
 
-bool isWallUp(Circle& circle, Grid<int32>& grid)
-{
-	int grid_x = static_cast<int>(circle.x) / 100;
-	int grid_y = static_cast<int>(circle.y) / 100;
-	int grid_y_up = std::max(grid_y - 1, 0);
+enum class Direction {Up, Down, Left, Right};
 
+bool isWallUp(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
+{
 	if (circle.y == 50) return true;
-	if (grid[grid_y_up][grid_x] > 0) return true;
-
+	if (grid[std::max(grid_y - 1, 0)][grid_x] > 0) return true;
 	return false;
 }
 
-bool isWallLeft(Circle& circle, Grid<int32>& grid)
+bool isWallLeft(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 {
-	int grid_x = static_cast<int>(circle.x) / 100;
-	int grid_y = static_cast<int>(circle.y) / 100;
-	int grid_x_left = std::max(grid_x - 1, 0);
-
 	if (circle.x == 50) return true;
-	if (grid[grid_y][grid_x_left] > 0) return true;
-
+	if (grid[grid_y][std::max(grid_x - 1, 0)] > 0) return true;
 	return false;
 }
 
-bool isWallDown(Circle& circle, Grid<int32>& grid)
+bool isWallDown(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 {
-	int grid_x = static_cast<int>(circle.x) / 100;
-	int grid_y = static_cast<int>(circle.y) / 100;
-	int grid_y_down = std::min(grid_y + 1, 7);
-
 	if (circle.y == 550) return true;
-	if (grid[grid_y_down][grid_x] > 0) return true;
-
+	if (grid[std::min(grid_y + 1, 7)][grid_x] > 0) return true;
 	return false;
 }
 
-bool isWallRight(Circle& circle, Grid<int32>& grid)
+bool isWallRight(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
+{
+	if (circle.x == 750) return true;
+	if (grid[grid_y][std::min(grid_x + 1, 5)] > 0) return true;
+	return false;
+}
+
+bool isWall(Circle& circle, Grid<int32>& grid, Direction dir)
 {
 	int grid_x = static_cast<int>(circle.x) / 100;
 	int grid_y = static_cast<int>(circle.y) / 100;
-	int grid_x_right = std::min(grid_x + 1, 5);
 
-	if (circle.x == 750) return true;
-	if (grid[grid_y][grid_x_right] > 0) return true;
-
+	switch (dir)
+	{
+	case Direction::Up: return isWallUp(circle, grid, grid_x, grid_y);
+	case Direction::Left: return isWallLeft(circle, grid, grid_x, grid_y);
+	case Direction::Down: return isWallDown(circle, grid, grid_x, grid_y);
+	case Direction::Right: return isWallRight(circle, grid, grid_x, grid_y);
+	}
 	return false;
 }
 
 void UpdateCircle(Circle& circle, Grid<int32>& grid)
 {
-	if (KeyLeft.down() && !isWallLeft(circle, grid)) circle.x -= 100;
-	if (KeyUp.down() && !isWallUp(circle, grid)) circle.y -= 100;
-	if (KeyRight.down() && !isWallRight(circle, grid)) circle.x += 100;
-	if (KeyDown.down() && !isWallDown(circle, grid)) circle.y += 100;
+	if (KeyUp.down() && !isWall(circle, grid, Direction::Up)) circle.y -= 100;
+	if (KeyLeft.down() && !isWall(circle, grid, Direction::Left)) circle.x -= 100;
+	if (KeyDown.down() && !isWall(circle, grid, Direction::Down)) circle.y += 100;
+	if (KeyRight.down() && !isWall(circle, grid, Direction::Right)) circle.x += 100;
 }
 
 void PrintGoal(const Circle& circle)
