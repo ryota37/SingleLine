@@ -37,14 +37,14 @@ bool isWallLeft(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 bool isWallDown(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 {
 	if (circle.y == 550) return true;
-	if (grid[std::min(grid_y + 1, 7)][grid_x] > 0) return true;
+	if (grid[std::min(grid_y + 1, 5)][grid_x] > 0) return true;
 	return false;
 }
 
 bool isWallRight(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 {
 	if (circle.x == 750) return true;
-	if (grid[grid_y][std::min(grid_x + 1, 5)] > 0) return true;
+	if (grid[grid_y][std::min(grid_x + 1, 7)] > 0) return true;
 	return false;
 }
 
@@ -98,10 +98,10 @@ void VisualizeCircleRoute(const Circle& circle, Grid<int32>& grid)
 		for (int32 x = 0; x < grid.width(); ++x)
 		{
 			const RectF rect{ (x * 100), (y * 100), 100 };
-			if (x == grid_x && y == grid_y && isDirectionKeyPressed())
+			if (x == grid_x && y == grid_y && grid[y][x] == 0)
 			{
-				// 円が格子を通るたびに要素を 0 → 1 → 0 → 1 ... と変化させる
-				++grid[y][x] %= 2;
+				// 円が格子を通った時に要素を0→1にする
+				++grid[y][x] += 1;
 			}
 		}
 	}
