@@ -20,30 +20,38 @@ void DrawCircle(const Circle& circle)
 
 enum class Direction {Up, Down, Left, Right};
 
+namespace Coordinate
+{
+	constexpr int TOP_GRID_X = 50;
+	constexpr int TOP_GRID_Y = 50;
+	constexpr int BOTTUM_GRID_X = 750;
+	constexpr int BOTTUM_GRID_Y = 550;
+}
+
 bool isWallUp(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 {
-	if (circle.y == 50) return true;
+	if (circle.y == Coordinate::TOP_GRID_Y) return true;
 	if (grid[std::max(grid_y - 1, 0)][grid_x] > 0) return true;
 	return false;
 }
 
 bool isWallLeft(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 {
-	if (circle.x == 50) return true;
+	if (circle.x == Coordinate::TOP_GRID_X) return true;
 	if (grid[grid_y][std::max(grid_x - 1, 0)] > 0) return true;
 	return false;
 }
 
 bool isWallDown(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 {
-	if (circle.y == 550) return true;
+	if (circle.y == Coordinate::BOTTUM_GRID_Y) return true;
 	if (grid[std::min(grid_y + 1, 5)][grid_x] > 0) return true;
 	return false;
 }
 
 bool isWallRight(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
 {
-	if (circle.x == 750) return true;
+	if (circle.x == Coordinate::BOTTUM_GRID_X) return true;
 	if (grid[grid_y][std::min(grid_x + 1, 7)] > 0) return true;
 	return false;
 }
@@ -73,8 +81,8 @@ void UpdateCircle(Circle& circle, Grid<int32>& grid)
 
 void PrintGoal(const Circle& circle)
 {
-	if (circle.x != 750) return;
-	if (circle.y != 550) return;
+	if (circle.x != Coordinate::BOTTUM_GRID_X) return;
+	if (circle.y != Coordinate::BOTTUM_GRID_Y) return;
 	Print << U"Goal!!!";
 }
 
@@ -114,7 +122,7 @@ void Main()
 	// 8x6 の二次元配列を作成し、全ての要素を 0 で初期化する
 	Grid<int32> grid(8, 6);
 
-	Circle circle{ 50,50,25 };
+	Circle circle{ Coordinate::TOP_GRID_X,Coordinate::TOP_GRID_Y,25 };
 
 	while (System::Update())
 	{
