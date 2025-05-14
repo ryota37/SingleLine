@@ -1,4 +1,6 @@
 ﻿# include <Siv3D.hpp>
+# include <cstdlib>
+# include <ctime>
 
 void DrawGrid(const Grid<int32>& grid)
 {
@@ -18,6 +20,13 @@ void DrawCircle(const Circle& circle)
 	circle.draw(Palette::Aqua);
 }
 
+int random_number(int n)
+{
+	std::srand(std::time(0));
+	int random_number = std::rand() % n;
+	return random_number;
+}
+
 enum class Direction {Up, Down, Left, Right};
 
 namespace Coordinate
@@ -26,6 +35,8 @@ namespace Coordinate
 	constexpr int TOP_GRID_Y = 50;
 	constexpr int BOTTUM_GRID_X = 750;
 	constexpr int BOTTUM_GRID_Y = 550;
+	int GOAL_X = 50 + 100 * random_number(7);
+	int GOAL_Y = 50 + 100 * random_number(6);
 }
 
 bool isWallUp(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
@@ -81,8 +92,8 @@ void UpdateCircle(Circle& circle, Grid<int32>& grid)
 
 void PrintGoal(const Circle& circle)
 {
-	if (circle.x != Coordinate::BOTTUM_GRID_X) return;
-	if (circle.y != Coordinate::BOTTUM_GRID_Y) return;
+	if (circle.x != Coordinate::GOAL_X) return;
+	if (circle.y != Coordinate::GOAL_Y) return;
 	Print << U"Goal!!!";
 }
 
@@ -123,6 +134,9 @@ void Main()
 	Grid<int32> grid(8, 6);
 
 	Circle circle{ Coordinate::TOP_GRID_X,Coordinate::TOP_GRID_Y,25 };
+
+	// Debug
+	Print << Coordinate::GOAL_X << Coordinate::GOAL_Y;
 
 	while (System::Update())
 	{
