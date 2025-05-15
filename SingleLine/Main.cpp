@@ -133,10 +133,11 @@ void Main()
 	// 8x6 の二次元配列を作成し、全ての要素を 0 で初期化する
 	Grid<int32> grid(8, 6);
 
-	Circle circle{ Coordinate::TOP_GRID_X,Coordinate::TOP_GRID_Y,25 };
+	// Goal
+	const RectF rect{ Coordinate::GOAL_X - 50, Coordinate::GOAL_Y - 50, 100 };
+	
 
-	// Debug
-	Print << Coordinate::GOAL_X << Coordinate::GOAL_Y;
+	Circle circle{ Coordinate::TOP_GRID_X,Coordinate::TOP_GRID_Y,25 };
 
 	while (System::Update())
 	{
@@ -149,5 +150,7 @@ void Main()
 		VisualizeCircleRoute(circle, grid);
 
 		PrintGoal(circle);
+
+		rect.draw(Palette::Olive);
 	}
 }
