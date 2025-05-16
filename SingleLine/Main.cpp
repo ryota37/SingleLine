@@ -27,6 +27,17 @@ int random_number(int n)
 	return random_number;
 }
 
+std::vector<int> random_pair_generator()
+{
+	int n, m;
+	do
+	{
+		n = random_number(7);
+		m = random_number(6);
+	} while (!((n % 2 == 0) ^ (m % 2 == 0)));
+	return std::vector<int> {n, m};
+}
+
 enum class Direction {Up, Down, Left, Right};
 
 namespace Coordinate
@@ -35,8 +46,10 @@ namespace Coordinate
 	constexpr int TOP_GRID_Y = 50;
 	constexpr int BOTTUM_GRID_X = 750;
 	constexpr int BOTTUM_GRID_Y = 550;
-	int GOAL_X = 50 + 100 * random_number(7);
-	int GOAL_Y = 50 + 100 * random_number(6);
+
+	std::vector<int> pair = random_pair_generator();
+	int GOAL_X = 50 + 100 * pair[0];
+	int GOAL_Y = 50 + 100 * pair[1];
 }
 
 bool isWallUp(Circle& circle, Grid<int32>& grid, int grid_x, int grid_y)
