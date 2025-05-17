@@ -103,11 +103,17 @@ void UpdateCircle(Circle& circle, Grid<int32>& grid)
 	if (KeyRight.down() && !isWall(circle, grid, Direction::Right)) circle.x += 100;
 }
 
-void PrintGoal(const Circle& circle)
+void PrintResult(const Circle& circle)
 {
 	if (circle.x != Coordinate::GOAL_X) return;
 	if (circle.y != Coordinate::GOAL_Y) return;
 	Print << U"Goal!!!";
+}
+
+void DrawGoalGrid()
+{
+	const RectF rect{ Coordinate::GOAL_X - 50, Coordinate::GOAL_Y - 50, 100 };
+	rect.draw(Palette::Olive);
 }
 
 bool isDirectionKeyPressed()
@@ -146,10 +152,6 @@ void Main()
 	// 8x6 の二次元配列を作成し、全ての要素を 0 で初期化する
 	Grid<int32> grid(8, 6);
 
-	// Goal
-	const RectF rect{ Coordinate::GOAL_X - 50, Coordinate::GOAL_Y - 50, 100 };
-	
-
 	Circle circle{ Coordinate::TOP_GRID_X,Coordinate::TOP_GRID_Y,25 };
 
 	while (System::Update())
@@ -160,10 +162,10 @@ void Main()
 
 		DrawCircle(circle);
 
+		DrawGoalGrid();
+
 		VisualizeCircleRoute(circle, grid);
 
-		PrintGoal(circle);
-
-		rect.draw(Palette::Olive);
+		PrintResult(circle);
 	}
 }
