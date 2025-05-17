@@ -103,11 +103,24 @@ void UpdateCircle(Circle& circle, Grid<int32>& grid)
 	if (KeyRight.down() && !isWall(circle, grid, Direction::Right)) circle.x += 100;
 }
 
-void PrintResult(const Circle& circle)
+bool isAllGridPassed(const Grid<int32>& grid)
+{
+	for (int32 y = 0; y < grid.height(); ++y)
+	{
+		for (int32 x = 0; x < grid.width(); ++x)
+		{
+			if (grid[y][x] == 0) return false;
+		}
+	}
+	return true;
+}
+
+void PrintResult(const Circle& circle, const Grid<int32>& grid)
 {
 	if (circle.x != Coordinate::GOAL_X) return;
 	if (circle.y != Coordinate::GOAL_Y) return;
-	Print << U"Goal!!!";
+	if (isAllGridPassed(grid)) { Print << U"Success!!!"; }
+	else { Print << U"Failure!!!"; }
 }
 
 void DrawGoalGrid()
@@ -124,7 +137,6 @@ bool isDirectionKeyPressed()
 	if (KeyDown.down()) return true;
 	return false;
 }
-
 
 void VisualizeCircleRoute(const Circle& circle, Grid<int32>& grid)
 {
@@ -166,6 +178,6 @@ void Main()
 
 		VisualizeCircleRoute(circle, grid);
 
-		PrintResult(circle);
+		PrintResult(circle, grid);
 	}
 }
