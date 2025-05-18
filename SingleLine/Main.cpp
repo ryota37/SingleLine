@@ -115,12 +115,12 @@ bool isAllGridPassed(const Grid<int32>& grid)
 	return true;
 }
 
-void PrintResult(const Circle& circle, const Grid<int32>& grid)
+void PrintResult(const Circle& circle, const Grid<int32>& grid, const Font& font)
 {
 	if (circle.x != Coordinate::GOAL_X) return;
 	if (circle.y != Coordinate::GOAL_Y) return;
-	if (isAllGridPassed(grid)) { Print << U"Success!!!"; }
-	else { Print << U"Failure!!!"; }
+	if (isAllGridPassed(grid)) { font(U"Success!!!").drawAt(Vec2{ 400, 300 }, Palette::Black); }
+	else { font(U"Failure!!!").drawAt(Vec2{ 400, 300 }, Palette::Black); }
 }
 
 void DrawGoalGrid()
@@ -163,8 +163,8 @@ void Main()
 
 	// 8x6 の二次元配列を作成し、全ての要素を 0 で初期化する
 	Grid<int32> grid(8, 6);
-
 	Circle circle{ Coordinate::TOP_GRID_X,Coordinate::TOP_GRID_Y,25 };
+	const Font font{ FontMethod::MSDF, 48, Typeface::Bold };
 
 	while (System::Update())
 	{
@@ -178,6 +178,6 @@ void Main()
 
 		VisualizeCircleRoute(circle, grid);
 
-		PrintResult(circle, grid);
+		PrintResult(circle, grid, font);
 	}
 }
